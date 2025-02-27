@@ -1,8 +1,8 @@
 <?php
 // config.prod.php
-$servername = "your_production_db_host";
-$db_username = "your_production_username";
-$db_password = "your_production_password";
+$servername = "localhost";
+$db_username = "Fardin";
+$db_password = "Fardin1380";
 $dbname = "torchess_db";    // production database name (can be different if needed)
 
 // Create connection
