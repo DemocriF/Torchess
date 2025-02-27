@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MainPage - TorChess</title>
+    <style>
+    /* Reset and basic styling */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background-color: #eaeaea; }
+
+    /* ===== Header Section ===== */
+    header.header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      background-color: #333;
+      padding: 10px 20px;
+    }
+    .header-left { display: flex; flex-direction: column; }
+    .brand {
+      color: #f2f2f2;
+      font-size: 24px;
+      font-weight: bold;
+      text-decoration: none;
+      margin-bottom: 5px;
+    }
+    .nav-links { display: flex; gap: 10px; }
+    .nav-links a {
+      color: #f2f2f2;
+      text-decoration: none;
+      padding: 6px 10px;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+    .nav-links a:hover { background-color: #ddd; color: black; }
+    .profile-menu { position: relative; display: inline-block; }
+    .profile {
+      color: #f2f2f2;
+      text-decoration: none;
+      font-size: 14px;
+      padding: 6px 10px;
+      background-color: #555;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    .profile:hover { background-color: #ddd; color: black; }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: #fff;
+      min-width: 120px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+      border-radius: 4px;
+    }
+    .dropdown-content a {
+      color: #333;
+      padding: 8px 12px;
+      text-decoration: none;
+      display: block;
+    }
+    .dropdown-content a:hover { background-color: #ddd; }
+    .profile-menu:hover .dropdown-content { display: block; }
+
+    /* ===== Main Content ===== */
+    .main-content {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      justify-content: center;
+    }
+    /* Left Column: Logo Section */
+    .logo-section {
+      width: 150px;
+      height: 300px;
+      border: 2px #ccc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      background-color: #fff;
+    }
+    /* Center Column: Game Modes and News */
+    .center-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+    /* Game Container Square */
+    .game-container {
+      width: 400px;
+      height: 400px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+    }
+    .mode-row { display: flex; flex-direction: column; gap: 10px; }
+    .mode-title { font-weight: bold; font-size: 18px; color: #333; }
+    .button-row { display: flex; gap: 10px; }
+    .button-row button {
+      flex: 1;
+      padding: 12px;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .button-row button:hover { background-color: #0056b3; transform: scale(1.05); }
+    .news-events {
+      width: 400px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+    .news-events h3 { margin-bottom: 10px; color: #333; }
+    .news-events ul { list-style: none; }
+    .news-events ul li { margin-bottom: 5px; }
+    .news-events ul li a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+    .news-events ul li a:hover { text-decoration: underline; }
+    /* Right Column: Ads */
+    .ads-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .ad-box {
+      width: 200px;
+      height: 150px;
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+      font-size: 16px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+<!-- ===== Header ===== -->
+<header class="header">
+    <div class="header-left">
+        <a href="MainPage.html" class="brand">TorChess</a>
+        <nav class="nav-links">
+            <a href="MainPage.html">Home</a>
+            <a href="tournament.html">Tournaments</a>
+            <a href="about.html">About Us</a>
+            <a href="payment.html">Deposit</a>
+        </nav>
+    </div>
+    <div class="header-right">
+        <div class="profile-menu">
+            <a href="#" class="profile">Profile</a>
+            <div class="dropdown-content">
+                <a href="signin.html">Profile</a>
+                <a href="inbox.html">Inbox</a>
+                <a href="settings.html">Settings</a>
+                <a href="logout.html">Log out</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ===== Main Content ===== -->
+<div class="main-content">
+    <!-- Left Column: Logo Section -->
+    <div class="logo-section">
+        <img src="logo/TorChess.png" alt="Logo" style="max-width:116%; height:110%;">
+    </div>
+    <!-- Center Column: Game Modes and News -->
+    <div class="center-section">
+        <!-- Game Modes Square -->
+        <div class="game-container">
+            <!-- Row 1: Bullet -->
+            <div class="mode-row">
+                <div class="mode-title">Bullet</div>
+                <div class="button-row">
+                    <button onclick="joinGame(30);">30s</button>
+                    <button onclick="joinGame(60);">1</button>
+                    <button onclick="joinGame(90);">1 + 2</button>
+                </div>
+            </div>
+            <!-- Row 2: Blitz -->
+            <div class="mode-row">
+                <div class="mode-title">Blitz</div>
+                <div class="button-row">
+                    <button onclick="joinGame(180);">3</button>
+                    <button onclick="joinGame(240);">3 + 2</button>
+                    <button onclick="joinGame(300);">5</button>
+                </div>
+            </div>
+            <!-- Row 3: Classical -->
+            <div class="mode-row">
+                <div class="mode-title">Classical</div>
+                <div class="button-row">
+                    <button onclick="joinGame(300);">5 + 2</button>
+                    <button onclick="joinGame(600);">10 min</button>
+                    <button onclick="joinGame(900);">15 min</button>
+                </div>
+            </div>
+        </div>
+        <!-- News & Upcoming Events Section -->
+        <div class="news-events">
+            <h3>News & Upcoming Events</h3>
+            <ul>
+                <li><a href="#">Event or Link 1</a></li>
+                <li><a href="#">Event or Link 2</a></li>
+                <li><a href="#">More News</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- Right Column: Ads -->
+    <div class="ads-section">
+        <div class="ad-box">Ad Space 1</div>
+        <div class="ad-box">Ad Space 2</div>
+        <div class="ad-box">Ad Space 3</div>
+    </div>
+</div>
+
+<script>
+    // joinGame function: redirect to game.html with chosen time (in seconds) as a query parameter.
+    function joinGame(timeControl) {
+      window.location.href = "game.html?time=" + timeControl;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Deposit Funds - TorChess</title>
+    <style>
+    /* Reset & Basic Styles */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background-color: #eaeaea; }
+
+    /* ===== Header Section ===== */
+    header.header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      background-color: #333;
+      padding: 10px 20px;
+    }
+    .header-left { display: flex; flex-direction: column; }
+    .brand {
+      color: #f2f2f2;
+      font-size: 24px;
+      font-weight: bold;
+      text-decoration: none;
+      margin-bottom: 5px;
+    }
+    .nav-links { display: flex; gap: 10px; }
+    .nav-links a {
+      color: #f2f2f2;
+      text-decoration: none;
+      padding: 6px 10px;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+    .nav-links a:hover { background-color: #ddd; color: black; }
+    .profile-menu { position: relative; display: inline-block; }
+    .profile {
+      color: #f2f2f2;
+      text-decoration: none;
+      font-size: 14px;
+      padding: 6px 10px;
+      background-color: #555;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    .profile:hover { background-color: #ddd; color: black; }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: #fff;
+      min-width: 120px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+      border-radius: 4px;
+    }
+    .dropdown-content a {
+      color: #333;
+      padding: 8px 12px;
+      text-decoration: none;
+      display: block;
+    }
+    .dropdown-content a:hover { background-color: #ddd; }
+    .profile-menu:hover .dropdown-content { display: block; }
+
+    /* ===== Deposit (Payment) Page Styles ===== */
+    .deposit-container {
+      max-width: 800px;
+      margin: 40px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .deposit-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .deposit-container p {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #555;
+    }
+    .bank-logos {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .bank-logos a {
+      display: block;
+      text-align: center;
+    }
+    .bank-logos img {
+      width: 120px;
+      height: auto;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      transition: transform 0.3s;
+    }
+    .bank-logos img:hover {
+      transform: scale(1.05);
+      cursor: pointer;
+    }
+    .deposit-instructions {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .deposit-instructions textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      resize: none;
+      font-size: 14px;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+<!-- ===== Header (Navigation Bar) ===== -->
+<header class="header">
+    <div class="header-left">
+        <a href="Main Page.html" class="brand">TorChess</a>
+        <nav class="nav-links">
+            <a href="Main Page.html">Home</a>
+            <a href="tournament.html">Tournaments</a>
+            <a href="about.html">About Us</a>
+            <a href="payment.html">Deposit</a>
+        </nav>
+    </div>
+    <div class="header-right">
+        <div class="profile-menu">
+            <a href="#" class="profile">Profile</a>
+            <div class="dropdown-content">
+                <a href="profile.html">Profile</a>
+                <a href="inbox.html">Inbox</a>
+                <a href="settings.html">Settings</a>
+                <a href="logout.html">Log out</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ===== Deposit Content ===== -->
+<div class="deposit-container">
+    <h2>Deposit Funds</h2>
+    <p>Select your bank to connect and deposit funds:</p>
+    <div class="bank-logos">
+        <!-- Replace the src values with the actual paths to your bank logos -->
+        <a href="#" onclick="connectBank('RBC'); return false;">
+            <img src="logo/rbc.png" alt="RBC Logo">
+        </a>
+        <a href="#" onclick="connectBank('TD'); return false;">
+            <img src="logo/td.png" alt="TD Logo">
+        </a>
+        <a href="#" onclick="connectBank('BMO'); return false;">
+            <img src="logo/bmo.png" alt="BMO Logo">
+        </a>
+        <a href="#" onclick="connectBank('CIBC'); return false;">
+            <img src="logo/cibc.png" alt="CIBC Logo">
+        </a>
+        <a href="#" onclick="connectBank('Scotiabank'); return false;">
+            <img src="logo/scotiabank.png" alt="Scotiabank Logo">
+        </a>
+    </div>
+    <div class="deposit-instructions">
+        <!-- A readonly textarea showing instructions with the unique reference code -->
+        <textarea id="instructions" rows="3" readonly></textarea>
+    </div>
+</div>
+
+<script>
+    // In a real application this unique reference number would be generated during account creation
+    var referenceNumber = "ABC123XYZ"; // Example unique reference
+
+    // Update the instructions textbox with the reference number
+    document.getElementById("instructions").value =
+      "For interact deposit, please send funds to Torchess@gmail.com with your reference code as a text: " + referenceNumber;
+
+    // Function to redirect to each bank's sign-in page
+    function connectBank(bankName) {
+      let bankUrl = "";
+      switch (bankName) {
+        case "RBC":
+          // RBC's online banking page (for demo purposes)
+          bankUrl = "https://www.rbcroyalbank.com/online-banking.html";
+          break;
+        case "TD":
+          // TD's online banking page (for demo purposes)
+          bankUrl = "https://www.td.com/ca/en/personal-banking/online-banking/";
+          break;
+        case "BMO":
+          // BMO's online banking page (for demo purposes)
+          bankUrl = "https://www.bmo.com/main/personal-banking/online-banking";
+          break;
+        case "CIBC":
+          // CIBC's online banking page (for demo purposes)
+          bankUrl = "https://www.cibc.com/en/personal-banking/online-banking.html";
+          break;
+        case "Scotiabank":
+          // Scotiabank's online banking page (for demo purposes)
+          bankUrl = "https://www.scotiabank.com/ca/en/personal.html";
+          break;
+        default:
+          alert("Bank not supported.");
+          return;
+      }
+      // Open the bank's sign-in page in a new tab
+      window.open(bankUrl, "_blank");
+    }
+  </script>
+</body>
+</html>
