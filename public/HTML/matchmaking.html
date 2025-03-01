@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Matchmaking - TorChess</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eaeaea;
+      text-align: center;
+      padding-top: 50px;
+    }
+    .message {
+      font-size: 24px;
+      color: #333;
+    }
+    .cancel-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .cancel-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+<div class="message">Searching for an opponent...</div>
+<button class="cancel-btn" onclick="cancelMatchmaking()">Cancel</button>
+
+<!-- Include jQuery for AJAX polling -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  // Retrieve time control from query parameters
+  var timeControl = new URLSearchParams(window.location.search).get('time') || 300;
+
+  // Poll the matchmaking API every 3 seconds
+  var matchmakingInterval = setInterval(pollMatchmaking, 3000);
+
+  function pollMatchmaking() {
+    $.ajax({
+      url: "api/matchmaking.php", // <-- Your server-side matchmaking endpoint
+      method: "GET",
+      data: { time: timeControl },
+      dataType: "json",
+      success: function(response) {
+        // Expecting a JSON response like: { matched: true, gameId: "GAME123", assignedColor: "w" }
+        if (response.matched) {
+          clearInterval(matchmakingInterval);
+          // Redirect to Game page with game details in query parameters
+          window.location.href = "Game.html?gameId=" + response.gameId + "&time=" + timeControl + "&color=" + response.assignedColor;
+        }
+      },
+      error: function() {
+        console.log("Error contacting matchmaking server");
+      }
+    });
+  }
+
+  // Function to cancel matchmaking and return to MainPage
+  function cancelMatchmaking() {
+    clearInterval(matchmakingInterval);
+    window.location.href = "MainPage.html";
+  }
+</script>
+</body>
+</html>
