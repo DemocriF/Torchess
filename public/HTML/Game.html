@@ -315,5 +315,147 @@
       }
     });
   </script>
+<!-- ... (rest of your Game page HTML remains the same) ... -->
+
+<script>
+    $(document).ready(function() {
+        // Retrieve parameters from the URL
+        var urlParams = new URLSearchParams(window.location.search);
+        var assignedColor = urlParams.get('color') || 'w'; // Assigned by matchmaking
+        var gameId = urlParams.get('gameId') || null; // Game identifier from matchmaking
+        var timeControl = parseInt(urlParams.get('time')) || 300; // Total time per player
+
+        // Set timers based on time control
+        var whiteTime = timeControl, blackTime = timeControl;
+        var timerInterval = null;
+
+        function formatTime(seconds) {
+            var minutes = Math.floor(seconds / 60);
+            var secs = seconds % 60;
+            return (minutes < 10 ? "0" + minutes : minutes) + ":" + (secs < 10 ? "0" + secs : secs);
+        }
+
+        // Initialize the chess game and board (rest of your chessboard.js setup remains unchanged)
+        var game = new Chess();
+        var config = {
+            draggable: true,
+            position: 'start',
+            pieceTheme: function(piece) {
+                var mapping = {
+                    'wP': 'wPawn', 'bP': 'bPawn',
+                    'wN': 'wKnight', 'bN': 'bKnight',
+                    'wB': 'wBishop', 'bB': 'bBishop',
+                    'wK': 'wKing',   'bK': 'bKing',
+                    'wR': 'wRook',   'bR': 'bRook',
+                    'wQ': 'wQueen',  'bQ': 'bQueen'
+                };
+                return 'pieces/' + mapping[piece] + '.png';
+            },
+            onDragStart: function(source, piece, position, orientation) {
+                if (game.game_over()) return false;
+                // Allow moves only for the player with the assigned color.
+                if (game.turn() !== assignedColor) return false;
+                if (piece.charAt(0) !== assignedColor) return false;
+            },
+            onDrop: function(source, target) {
+                var move = game.move({
+                    from: source,
+                    to: target,
+                    promotion: 'q'
+                });
+                if (move === null) return 'snapback';
+                updateMoveHistory(move);
+                if (game.game_over()) {
+                    endGame();
+                }
+            },
+            onSnapEnd: function() { board.position(game.fen()); }
+        };
+
+        var board = Chessboard('board', config);
+
+        function updateMoveHistory(move) {
+            var tableBody = document.getElementById('move-history-body');
+            if (move.color === 'w') {
+                var newRow = document.createElement('tr');
+                var whiteCell = document.createElement('td');
+                whiteCell.textContent = move.san;
+                var blackCell = document.createElement('td');
+                newRow.appendChild(whiteCell);
+                newRow.appendChild(blackCell);
+                tableBody.appendChild(newRow);
+            } else {
+                var rows = tableBody.getElementsByTagName('tr');
+                if (rows.length > 0) {
+                    var lastRow = rows[rows.length - 1];
+                    lastRow.cells[1].textContent = move.san;
+                }
+            }
+        }
+
+        function startTimers() {
+            timerInterval = setInterval(function() {
+                // Check if a timer reached zero:
+                if (whiteTime <= 0) {
+                    clearInterval(timerInterval);
+                    showGameOverModal("Time's up! Black wins.");
+                    return;
+                }
+                if (blackTime <= 0) {
+                    clearInterval(timerInterval);
+                    showGameOverModal("Time's up! White wins.");
+                    return;
+                }
+                if (game.game_over()) {
+                    clearInterval(timerInterval);
+                    return;
+                }
+                if (game.turn() === 'w') { whiteTime--; }
+                else if (game.turn() === 'b') { blackTime--; }
+                $('#white-timer').text(formatTime(whiteTime));
+                $('#black-timer').text(formatTime(blackTime));
+            }, 1000);
+        }
+        startTimers();
+
+        function endGame() {
+            clearInterval(timerInterval);
+            var result = "";
+            if (game.in_checkmate()) {
+                var loser = game.turn() === 'w' ? 'White' : 'Black';
+                var winner = loser === 'White' ? 'Black' : 'White';
+                result = "Checkmate! " + winner + " wins.";
+            } else if (game.in_stalemate()) { result = "Stalemate! Draw."; }
+            else if (game.in_draw()) { result = "Draw!"; }
+            else if (game.insufficient_material()) { result = "Draw by insufficient material!"; }
+            else if (game.in_threefold_repetition()) { result = "Draw by threefold repetition!"; }
+            else { result = "Game Over!"; }
+            showGameOverModal(result);
+        }
+
+        function showGameOverModal(message) {
+            var overlay = document.createElement('div');
+            overlay.className = 'modal-overlay';
+            var modal = document.createElement('div');
+            modal.className = 'modal-content';
+            var header = document.createElement('h2');
+            header.textContent = message;
+            modal.appendChild(header);
+            var btnContainer = document.createElement('div');
+            btnContainer.className = 'modal-buttons';
+            var mainBtn = document.createElement('button');
+            mainBtn.textContent = "Main Page";
+            mainBtn.onclick = function() { window.location.href = "MainPage.html"; };
+            btnContainer.appendChild(mainBtn);
+            var analysisBtn = document.createElement('button');
+            analysisBtn.textContent = "Analysis Page";
+            analysisBtn.onclick = function() { window.location.href = "analysis.html"; };
+            btnContainer.appendChild(analysisBtn);
+            modal.appendChild(btnContainer);
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+        }
+    });
+</script>
 </body>
 </html>

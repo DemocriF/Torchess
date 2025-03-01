@@ -236,6 +236,13 @@
     function joinGame(timeControl) {
       window.location.href = "Game.html?time=" + timeControl;
     }
-  </script>
+</script>
+<script>
+    // When a timer button is clicked, redirect to matchmaking page.
+    function joinGame(timeControl) {
+        // Redirect to matchmaking page with the chosen time control.
+        window.location.href = "matchmaking.html?time=" + timeControl;
+    }
+</script>
 </body>
 </html>
