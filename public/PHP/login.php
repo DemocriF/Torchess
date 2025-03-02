@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (password_verify($password, $user['password'])) {
       // Password is correct; set session variables
       $_SESSION['user_id'] = $user['id'];
-      header("Location: account.php");
+      header("Location: PHP/account.php");
       exit();
     } else {
       header("Location: profile.html?error=" . urlencode("Incorrect password."));
