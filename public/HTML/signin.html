@@ -77,7 +77,7 @@
         <?php if(isset($_GET['error'])): ?>
         <p style="color:red;"><?php echo htmlspecialchars($_GET['error']); ?></p>
         <?php endif; ?>
-        <form action="../login.php" method="POST">
+        <form action="../PHP/login.php" method="POST">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
 
