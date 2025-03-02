@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $stmt->execute();
   $result = $stmt->get_result();
   if ($result->num_rows > 0) {
-    header("Location: signup.html?error=" . urlencode("Username already exists."));
+    header("Location: /signup.html?error=" . urlencode("Username already exists."));
     exit();
   }
   $stmt->close();
