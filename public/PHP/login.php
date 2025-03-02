@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $password = $_POST['password'];
 
   if (empty($username) || empty($password)) {
-    header("Location: profile.html?error=" . urlencode("Please fill in all fields."));
+    header("Location: /profile.html?error=" . urlencode("Please fill in all fields."));
     exit();
   }
 
@@ -27,11 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       header("Location: /PHP/account.php");
       exit();
     } else {
-      header("Location: /profile.html?error=" . urlencode("Incorrect password."));
+      header("Location: /signin.html?error=" . urlencode("Incorrect password."));
       exit();
     }
   } else {
-    header("Location: /profile.html?error=" . urlencode("User not found."));
+    header("Location: /signin.html?error=" . urlencode("User not found."));
     exit();
   }
   $stmt->close();
