@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($stmt->execute()) {
     // Registration successful; log the user in
     $_SESSION['user_id'] = $stmt->insert_id;
-    header("Location: PHP/account.php");
+    header("Location: ../HTML/MainPage.html");
     exit();
   } else {
     header("Location: signup.html?error=" . urlencode("Signup failed. Please try again."));
