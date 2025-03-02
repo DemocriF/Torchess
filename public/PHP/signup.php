@@ -1,7 +1,7 @@
 <?php
 // signup.php
 session_start();
-require_once 'config.php';
+require_once 'config.php';  // Ensure this file is in the same PHP directory
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $username = trim($_POST['username']);
@@ -23,44 +23,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
   $stmt->close();
 
-  // Validate the file upload but do not store it.
-  if (!isset($_FILES['id_attachment']) || $_FILES['id_attachment']['error'] !== UPLOAD_ERR_OK) {
-    header("Location: signup.html?error=" . urlencode("Please upload your ID file."));
-    exit();
-  }
-
-  // Optional: Validate file type and size
-  $fileType = $_FILES['id_attachment']['type'];
-  $fileSize = $_FILES['id_attachment']['size'];
-  $allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
-  $maxSize = 5 * 1024 * 1024; // 5 MB
-
-  if (!in_array($fileType, $allowedTypes)) {
-    header("Location: signup.html?error=" . urlencode("Invalid file type."));
-    exit();
-  }
-  if ($fileSize > $maxSize) {
-    header("Location: signup.html?error=" . urlencode("File size too large."));
-    exit();
-  }
-
-  // Discard the uploaded file (remove from temporary location)
-  @unlink($_FILES['id_attachment']['tmp_name']);
-
-  // Since we don't store the file, set id_attachment as an empty string (or NULL)
-  $id_attachment = "";
+  // Remove file handling entirely (no file upload is required now)
 
   // Hash the password securely
   $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
   // Insert the new user into the database
-  // If you want to store NULL instead of an empty string, modify the query accordingly.
-  $stmt = $conn->prepare("INSERT INTO users (username, password, id_attachment) VALUES (?, ?, ?)");
-  $stmt->bind_param("sss", $username, $hashedPassword, $id_attachment);
+  // Updated SQL to remove id_attachment column
+  $stmt = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+  $stmt->bind_param("ss", $username, $hashedPassword);
   if ($stmt->execute()) {
     // Registration successful; log the user in
     $_SESSION['user_id'] = $stmt->insert_id;
-    header("Location: ../HTML/MainPage.html");
+    // Redirect to MainPage.html (adjust path as needed)
+    header("Location: /HTML/MainPage.html");
     exit();
   } else {
     header("Location: signup.html?error=" . urlencode("Signup failed. Please try again."));

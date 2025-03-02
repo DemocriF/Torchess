@@ -70,15 +70,12 @@
     <?php if(isset($_GET['error'])): ?>
     <p style="color:red;"><?php echo htmlspecialchars($_GET['error']); ?></p>
     <?php endif; ?>
-    <form action="../PHP/signup.php" method="POST" enctype="multipart/form-data">
+    <form action="/PHP/signup.php" method="POST" enctype="multipart/form-data">
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" required>
 
       <label for="password">Password:</label>
       <input type="password" id="password" name="password" required>
-
-      <label for="id_attachment">Upload ID:</label>
-      <input type="file" id="id_attachment" name="id_attachment" accept="image/*,application/pdf" required>
 
       <button type="submit">Sign Up</button>
     </form>
