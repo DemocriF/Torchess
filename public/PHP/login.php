@@ -24,19 +24,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (password_verify($password, $user['password'])) {
       // Password is correct; set session variables
       $_SESSION['user_id'] = $user['id'];
-      header("Location: PHP/account.php");
+      header("Location: /PHP/account.php");
       exit();
     } else {
-      header("Location: ../HTML/profile.html?error=" . urlencode("Incorrect password."));
+      header("Location: /profile.html?error=" . urlencode("Incorrect password."));
       exit();
     }
   } else {
-    header("Location: ../HTML/profile.html?error=" . urlencode("User not found."));
+    header("Location: /profile.html?error=" . urlencode("User not found."));
     exit();
   }
   $stmt->close();
 } else {
-  header("Location: ../HTML/profile.html");
+  header("Location: /profile.html");
   exit();
 }
 ?>

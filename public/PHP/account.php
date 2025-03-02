@@ -4,7 +4,7 @@ session_start();
 require_once 'config.php';  // Ensure this includes the database connection
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../HTML/signin.html?error=" . urlencode("Not logged in"));
+    header("Location: /signin.html?error=" . urlencode("Not logged in"));
     exit();
 }
 
@@ -46,7 +46,7 @@ $conn->close();
         <p>ID Attachment: <?php echo htmlspecialchars($user['id_attachment']); ?></p>
     <?php endif; ?>
     <div class="logout">
-        <a href="../PHP/logout.php">Logout</a>
+        <a href="/PHP/logout.php">Logout</a>
     </div>
 </div>
 </body>
