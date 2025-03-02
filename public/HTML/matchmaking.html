@@ -45,7 +45,7 @@
 
   function pollMatchmaking() {
     $.ajax({
-      url: "api/matchmaking.php", // <-- Your server-side matchmaking endpoint
+      url: "PHP/matchmaking.php", // <-- Your server-side matchmaking endpoint
       method: "GET",
       data: { time: timeControl },
       dataType: "json",
