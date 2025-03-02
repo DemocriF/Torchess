@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
   $stmt->close();
 } else {
-  header("Location: profile.html");
+  header("Location: ../HTML/profile.html");
   exit();
 }
 ?>
