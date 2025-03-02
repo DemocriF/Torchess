@@ -18,7 +18,6 @@ $result = $stmt->get_result();
 
 if ($result->num_rows === 1) {
     $user = $result->fetch_assoc();
-    header ("Location: /profile.html");
 } else {
     echo "User not found.";
     exit();
