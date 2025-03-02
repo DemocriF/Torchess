@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Registration successful; log the user in
     $_SESSION['user_id'] = $stmt->insert_id;
     // Redirect to MainPage.html (adjust path as needed)
-    header("Location: /HTML/MainPage.html");
+    header("Location: /MainPage.html");
     exit();
   } else {
     header("Location: signup.html?error=" . urlencode("Signup failed. Please try again."));
