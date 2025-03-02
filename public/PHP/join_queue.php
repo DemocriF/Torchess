@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 header('Content-Type: application/json');
 
 // Get database connection
-require_once '../includes/db_connect.php';
+require_once '../includes/config.php';
 
 // Start session and verify user is logged in
 session_start();

@@ -37,37 +37,83 @@
 <!-- Include jQuery for AJAX polling -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  // Retrieve time control from query parameters
+  // Retrieve time control from query parameters (default to 300 seconds)
   var timeControl = new URLSearchParams(window.location.search).get('time') || 300;
+  var matchmakingInterval;
 
-  // Poll the matchmaking API every 3 seconds
-  var matchmakingInterval = setInterval(pollMatchmaking, 3000);
-
-  function pollMatchmaking() {
+  // Function to join the matchmaking queue
+  function joinQueue() {
     $.ajax({
-      url: "PHP/matchmaking.php", // <-- Your server-side matchmaking endpoint
-      method: "GET",
-      data: { time: timeControl },
+      url: "PHP/join_queue.php",  // Path to your join_queue.php file in the "api" folder
+      method: "POST",
+      data: JSON.stringify({ timeControl: timeControl }),
+      contentType: "application/json",
       dataType: "json",
       success: function(response) {
-        // Expecting a JSON response like: { matched: true, gameId: "GAME123", assignedColor: "w" }
-        if (response.matched) {
-          clearInterval(matchmakingInterval);
-          // Redirect to Game page with game details in query parameters
-          window.location.href = "Game.html?gameId=" + response.gameId + "&time=" + timeControl + "&color=" + response.assignedColor;
+        console.log("join_queue response:", response);
+        if (response.status === "immediate_match") {
+          // Immediate match found; redirect user with game details
+          window.location.href = "Game.html?gameId=" + response.game_id +
+                  "&time=" + timeControl +
+                  "&color=" + response.color;
+        } else if (response.status === "queued") {
+          // No immediate match; start polling for match status
+          pollForMatch();
+        } else {
+          console.error("Unexpected response from join_queue:", response);
         }
       },
-      error: function() {
-        console.log("Error contacting matchmaking server");
+      error: function(xhr, status, error) {
+        console.error("Error contacting join_queue endpoint:", error);
       }
     });
   }
 
-  // Function to cancel matchmaking and return to MainPage
+  // Function to poll the matchmaking status
+  function pollForMatch() {
+    matchmakingInterval = setInterval(function() {
+      $.ajax({
+        url: "PHP/check_match.php", // Path to your check_match.php file in the "api" folder
+        method: "GET",
+        dataType: "json",
+        success: function(response) {
+          console.log("check_match response:", response);
+          if (response.matched) {
+            clearInterval(matchmakingInterval);
+            window.location.href = "Game.html?gameId=" + response.game_id +
+                    "&time=" + timeControl +
+                    "&color=" + response.color;
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error("Error contacting check_match endpoint:", error);
+        }
+      });
+    }, 3000);  // Poll every 3 seconds
+  }
+
+  // Function to cancel matchmaking and leave the queue
   function cancelMatchmaking() {
     clearInterval(matchmakingInterval);
-    window.location.href = "MainPage.html";
+    $.ajax({
+      url: "PHP/leave_queue.php", // Path to your leave_queue.php file in the "api" folder
+      method: "POST",
+      dataType: "json",
+      success: function(response) {
+        console.log("leave_queue response:", response);
+        window.location.href = "MainPage.html";
+      },
+      error: function(xhr, status, error) {
+        console.error("Error contacting leave_queue endpoint:", error);
+        window.location.href = "MainPage.html";
+      }
+    });
   }
+
+  // Automatically join the queue when the page loads
+  $(document).ready(function() {
+    joinQueue();
+  });
 </script>
 </body>
 </html>
