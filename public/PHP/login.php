@@ -27,11 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       header("Location: PHP/account.php");
       exit();
     } else {
-      header("Location: profile.html?error=" . urlencode("Incorrect password."));
+      header("Location: ../HTML/profile.html?error=" . urlencode("Incorrect password."));
       exit();
     }
   } else {
-    header("Location: profile.html?error=" . urlencode("User not found."));
+    header("Location: ../HTML/profile.html?error=" . urlencode("User not found."));
     exit();
   }
   $stmt->close();
